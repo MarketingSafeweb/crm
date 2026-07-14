@@ -34,8 +34,8 @@ Inventário **real** de sistemas/fontes/integrações do legado; linhagem comple
 - Trabalhar com catálogo/identidade **conceituais** (não validados por dados) — aceitável **porque** estão rotulados como conceituais e não avançam para modelagem física.
 
 ## Riscos NÃO aceitos (bloqueadores)
-- **R-SEC-01** (`.env` versionado) — deve ser corrigido; não se aceita seguir com segredos versionáveis.
-- **R-SEC-02** (RLS não confirmada) — não se aceita inserir dados reais no Supabase sem confirmar RLS.
+- **R-SEC-01** (`.env` versionado) — **✅ REMEDIADO em 2026-07-14** (`.env` fora do versionamento; `.env.example` sem valores). Residual apenas no histórico (chaves publishable, sem urgência de rotação).
+- **R-SEC-02** (RLS não confirmada) — **permanece bloqueador**; não se aceita inserir dados reais no Supabase sem confirmar RLS. Não corrigível nesta sessão (requer acesso autorizado ao Supabase).
 - **PRV-01/PRV-03** (transferência internacional; retenção×exclusão) — não se aceita avançar sem posição jurídica.
 - Tratar hipóteses do legado como fatos — **não aceito** (nenhuma foi confirmada).
 

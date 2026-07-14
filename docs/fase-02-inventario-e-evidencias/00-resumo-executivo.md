@@ -30,7 +30,7 @@ Todo o conteúdo versionado do repositório `MarketingSafeweb/crm` (31 arquivos,
 ## Riscos críticos identificados (a partir de evidência real)
 | ID | Risco | Severidade | Evidência | Observação |
 |----|-------|:---:|-----------|-----------|
-| R-SEC-01 | `.env` está **versionado no Git** (padrão `!.env` no `.gitignore`; arquivo rastreado). | **Alto (como prática)** | `.gitignore`, `git ls-files` | Os valores atuais são chaves **publishable** (`NEXT_PUBLIC_*`), projetadas para exposição ao cliente e protegidas por RLS — logo o *vazamento atual* é de baixo impacto, mas o **padrão de comitar `.env`** abre caminho para vazamento de segredos reais no futuro. |
+| R-SEC-01 | `.env` estava **versionado no Git** (padrão `!.env` no `.gitignore`). **✅ REMEDIADO em 2026-07-14.** | **Alto → Residual Baixo** | `.gitignore`, `git ls-files` | Corrigido: `.env` removido do rastreamento, `.gitignore` ajustado, `.env.example` (sem valores) adicionado. Residual: valores publishable permanecem no histórico do Git (sem urgência de rotação, pois são públicos por design). Ver `08-seguranca-da-informacao.md`. |
 | R-SEC-02 | Segurança do Supabase com chave publishable **depende inteiramente de RLS**, que **não é inspecionável** neste ambiente. | **Alto (não confirmável)** | `.mcp.json` exige auth; MCP indisponível sem autorização | Sem confirmar RLS, não há garantia de proteção de dados. |
 | R-GOV-01 | Ausência total de governança de dados evidenciável (sem dicionário, sem schema, sem catálogo). | Alto | `find` (ausência) | Coerente com hipóteses da Fase 1 (não confirma o legado). |
 | R-EVI-01 | Impossível validar as hipóteses da Fase 1 sobre o legado — nenhuma fonte do legado está presente. | Alto | ausência | Bloqueio de método. |
@@ -49,6 +49,8 @@ Todo o conteúdo versionado do repositório `MarketingSafeweb/crm` (31 arquivos,
 ## Recomendação executiva
 **Não aprovar o gate da Fase 2.** O objetivo da fase (inventariar sistemas/dados/integrações reais e validar hipóteses com evidência) **não pode ser cumprido apenas com o repositório atual**, que é um scaffold greenfield. 
 
-**Próximo passo recomendado:** **Coleta adicional de evidências** — disponibilizar (em ambiente seguro e com minimização) inventário de sistemas, exportações de schema/metadados, contratos de integração, matriz de acessos e documentação de LGPD; e **autorizar a leitura do schema do Supabase** para análise. Em paralelo, tratar imediatamente **R-SEC-01** (remover `.env` do versionamento) e **confirmar RLS** (R-SEC-02), pois são achados de segurança acionáveis independentemente da coleta.
+**Próximo passo recomendado:** **Coleta adicional de evidências** — disponibilizar (em ambiente seguro e com minimização) inventário de sistemas, exportações de schema/metadados, contratos de integração, matriz de acessos e documentação de LGPD; e **autorizar a leitura do schema do Supabase** para análise.
+
+> **Atualização (2026-07-14):** **R-SEC-01 já foi remediado** nesta branch (`.env` fora do versionamento). **R-SEC-02 (confirmar RLS) permanece pendente** — depende de acesso autorizado ao Supabase, indisponível nesta sessão não interativa; nenhuma confirmação foi simulada.
 
 > Detalhamento por área nos arquivos `01`–`13` e no `inventario-estruturado.json`.

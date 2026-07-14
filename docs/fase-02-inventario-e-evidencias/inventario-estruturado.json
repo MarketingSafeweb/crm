@@ -117,14 +117,14 @@
     {"id": "INT-HYP", "from": "sistemas_de_negocio", "to": "futuro_crm", "status": "hipotetica", "classification": "hipotese", "notes": "Sem evidencia."}
   ],
   "data_quality_issues": [
-    {"id": "Q-REAL-01", "issue": "Metadados do app ainda do template (Create Next App)", "classification": "fato_comprovado", "evidence": "src/app/layout.tsx"},
+    {"id": "Q-REAL-01", "issue": "Metadados do app ainda do template (Create Next App)", "classification": "fato_comprovado", "evidence": "src/app/layout.tsx", "status": "remediado_2026-07-14", "remediation": "metadata atualizado para CRM Safeweb"},
     {"id": "Q1", "issue": "Duplicidade de cadastros", "classification": "hipotese", "measurable": false, "frequency": "nao_determinavel"},
     {"id": "Q10", "issue": "Conflitos entre sistemas", "classification": "hipotese", "measurable": false, "frequency": "nao_determinavel"},
     {"id": "Q13", "issue": "Dados sem finalidade/base legal", "classification": "hipotese", "measurable": false, "frequency": "nao_determinavel"}
   ],
   "security_findings": [
-    {"id": "SEC-01", "finding": ".env versionado no Git", "severity": "alto_como_pratica", "classification": "fato_comprovado", "evidence": [".gitignore", "git-ls-files"], "action": "remover do versionamento e auditar historico"},
-    {"id": "SEC-02", "finding": "RLS do Supabase nao confirmada", "severity": "alto_nao_confirmavel", "classification": "risco", "action": "confirmar RLS antes de dados reais"},
+    {"id": "SEC-01", "finding": ".env versionado no Git", "severity": "alto_como_pratica", "classification": "fato_comprovado", "evidence": [".gitignore", "git-ls-files"], "status": "remediado_2026-07-14", "remediation": ".env removido do rastreamento; .gitignore permite apenas .env.example; template sem valores adicionado", "residual": "valores publishable permanecem no historico do git; sem urgencia de rotacao"},
+    {"id": "SEC-02", "finding": "RLS do Supabase nao confirmada", "severity": "alto_nao_confirmavel", "classification": "risco", "status": "pendente", "action": "confirmar RLS antes de dados reais", "blocker": "requer acesso autorizado ao Supabase; sessao nao interativa"},
     {"id": "SEC-03", "finding": "Sem logs/auditoria de aplicacao", "severity": "medio", "classification": "inferencia_tecnica"},
     {"id": "SEC-04", "finding": "Sem autorizacao/privilegio minimo implementado", "severity": "medio", "classification": "inferencia_tecnica"}
   ],
@@ -175,8 +175,8 @@
   ],
   "decisions": [
     {"id": "DC1", "decision": "Autorizar coleta de evidencias do legado com minimizacao", "owner": "Gestao+Seguranca+DPO"},
-    {"id": "DC2", "decision": "Remover .env do versionamento e auditar historico", "owner": "TechLead/Seguranca", "actionable_now": true},
-    {"id": "DC3", "decision": "Confirmar RLS e regiao do Supabase", "owner": "TechLead/Seguranca"},
+    {"id": "DC2", "decision": "Remover .env do versionamento e auditar historico", "owner": "TechLead/Seguranca", "actionable_now": true, "status": "feito_2026-07-14_parcial", "note": "remocao do rastreamento feita; auditoria/reescrita de historico pendente (decisao humana)"},
+    {"id": "DC3", "decision": "Confirmar RLS e regiao do Supabase", "owner": "TechLead/Seguranca", "status": "pendente", "blocker": "requer acesso autorizado ao Supabase"},
     {"id": "DC4", "decision": "Emitir posicao juridica (transferencia, retencao x exclusao, operador)", "owner": "Juridico/DPO"},
     {"id": "DC5", "decision": "Aprovar definicoes de negocio", "owner": "Negocio+Dados"},
     {"id": "DC6", "decision": "Nomear responsaveis (governanca de dados, DPO)", "owner": "Diretoria"}
