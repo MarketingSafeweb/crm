@@ -1,0 +1,184 @@
+{
+  "meta": {
+    "phase": "fase-02-inventario-e-evidencias",
+    "generated_for": "CRM Safeweb",
+    "date": "2026-07-14",
+    "scope": "Apenas metadados tecnicos e conceituais. Sem dados pessoais, credenciais ou segredos.",
+    "gate_result": "REPROVADO",
+    "gate_reason": "Fase 2 incompleta por insuficiencia de evidencias: ambiente e um scaffold greenfield sem o legado.",
+    "recommended_next_phase": "Necessidade de coleta adicional de evidencias",
+    "classification_legend": [
+      "fato_comprovado",
+      "evidencia_parcial",
+      "hipotese",
+      "inferencia_tecnica",
+      "contradicao",
+      "informacao_ausente",
+      "risco",
+      "recomendacao"
+    ]
+  },
+  "systems": [
+    {
+      "id": "S1",
+      "name": "Aplicacao Next.js (CRM embriao)",
+      "category": "aplicacao web",
+      "status": "greenfield",
+      "classification": "fato_comprovado",
+      "evidence_refs": ["package.json", "src/**"],
+      "criticality": "alto",
+      "notes": "Scaffold create-next-app; sem dominio de negocio implementado."
+    },
+    {
+      "id": "S2",
+      "name": "Supabase (Auth + Postgres gerenciado)",
+      "category": "baas",
+      "project_ref": "fjnogxhfiikrxkhovpzm",
+      "access": "mcp_read_only_requires_auth",
+      "status": "conectado",
+      "classification": "fato_comprovado",
+      "evidence_refs": [".mcp.json", "src/lib/supabase/*"],
+      "criticality": "critico",
+      "notes": "Schema nao inspecionado nesta sessao; seguranca depende de RLS nao confirmada."
+    },
+    {
+      "id": "S3",
+      "name": "GitHub (MarketingSafeweb/crm)",
+      "category": "versionamento",
+      "status": "ativo",
+      "classification": "fato_comprovado",
+      "evidence_refs": ["contexto-do-repositorio"],
+      "criticality": "alto",
+      "notes": ".env versionado (SEC-01)."
+    },
+    {
+      "id": "S4",
+      "name": "Vercel (host pretendido)",
+      "category": "hospedagem",
+      "status": "apenas_mencionado",
+      "classification": "inferencia_tecnica",
+      "evidence_refs": ["README.md"],
+      "criticality": "nao_determinavel"
+    },
+    {
+      "id": "S-UNVERIFIED",
+      "name": "Sistemas do enunciado sem evidencia",
+      "list": ["Piperun", "Zendesk", "Webflow", "E-commerce/Checkout", "Infobip", "WhatsApp", "Mautic", "Emissao de certificados", "Portais de parceiros", "Portal do Contador", "Sistemas de AR", "Pontos de Atendimento", "Financeiro/Faturamento/Cobranca", "GA4", "Google Tag Manager", "Search Console", "Microsoft Clarity", "Data Warehouse", "Data Lake", "BI"],
+      "classification": "informacao_ausente",
+      "status": "sem_evidencia",
+      "notes": "Candidatos a inventariar na coleta futura. Nao confirmados como em uso."
+    }
+  ],
+  "data_sources": [
+    {"id": "FD1", "name": ".env", "system": "S1", "type": "config", "classification": "fato_comprovado", "quality": "nao_analisavel", "sensitivity": "baixa_chaves_publishable", "risk_refs": ["R-SEC-01"]},
+    {"id": "FD2", "name": "Supabase Postgres", "system": "S2", "type": "banco_relacional", "classification": "informacao_ausente", "quality": "nao_analisavel", "sensitivity": "potencialmente_alta", "notes": "Schema nao lido."},
+    {"id": "FD3", "name": "Codigo-fonte e config", "system": "S1", "type": "codigo", "classification": "fato_comprovado", "quality": "boa_como_scaffold", "sensitivity": "baixa"}
+  ],
+  "entities": [
+    {"name": "Pessoa", "type": "PF", "classification": "conceitual", "sensitive": true},
+    {"name": "Empresa", "type": "PJ", "classification": "conceitual"},
+    {"name": "Contato", "classification": "conceitual"},
+    {"name": "Usuario", "classification": "conceitual"},
+    {"name": "Pagador", "classification": "conceitual_papel"},
+    {"name": "Representante", "classification": "conceitual_papel"},
+    {"name": "Parceiro", "classification": "conceitual_papel"},
+    {"name": "Contador", "classification": "conceitual_papel"},
+    {"name": "AutoridadeDeRegistro", "classification": "conceitual_papel"},
+    {"name": "PontoDeAtendimento", "classification": "conceitual_papel"},
+    {"name": "Revendedor", "classification": "conceitual_papel"},
+    {"name": "Produto", "classification": "conceitual"},
+    {"name": "Certificado", "classification": "conceitual"},
+    {"name": "Oportunidade", "classification": "conceitual"},
+    {"name": "Interacao", "classification": "conceitual"},
+    {"name": "Atendimento", "classification": "conceitual"},
+    {"name": "Consentimento", "classification": "conceitual"},
+    {"name": "Papel", "classification": "conceitual_associativa", "notes": "Entidade associativa agente-contexto com vigencia."}
+  ],
+  "relationships": [
+    {"from": "Pessoa", "to": "Empresa", "type": "representante_legal", "temporal": true, "classification": "conceitual"},
+    {"from": "Pessoa", "to": "Empresa", "type": "contador", "temporal": true, "classification": "conceitual"},
+    {"from": "Pessoa", "to": "Empresa", "type": "colaborador_usuario", "temporal": true, "classification": "conceitual"},
+    {"from": "Pagador", "to": "Compra", "type": "custeia", "temporal": true, "classification": "conceitual"},
+    {"from": "Usuario", "to": "Produto", "type": "utiliza", "temporal": true, "classification": "conceitual"},
+    {"from": "Parceiro", "to": "Cliente", "type": "carteira", "temporal": true, "classification": "conceitual"},
+    {"from": "Cliente", "to": "AutoridadeDeRegistro", "type": "atendido_por", "temporal": true, "classification": "conceitual"}
+  ],
+  "identifiers": [
+    {"name": "CPF", "unique": "quase", "mutable": "raro", "may_be_absent": true, "use_as_pk": false, "classification": "conceitual"},
+    {"name": "CNPJ", "unique": "por_pj", "mutable": true, "may_be_absent": true, "use_as_pk": false, "classification": "conceitual"},
+    {"name": "email", "unique": false, "mutable": true, "may_be_absent": true, "use_as_pk": false, "classification": "conceitual"},
+    {"name": "telefone", "unique": false, "mutable": true, "may_be_absent": true, "use_as_pk": false, "classification": "conceitual"},
+    {"name": "surrogate_id", "unique": true, "mutable": false, "may_be_absent": false, "use_as_pk": true, "classification": "recomendacao"},
+    {"name": "auth_uid_supabase", "unique": "por_login", "mutable": false, "use_as_pk": false, "classification": "fato_comprovado", "notes": "Identidade de autenticacao; nao confundir com identidade da pessoa."}
+  ],
+  "integrations": [
+    {"id": "INT1", "from": "S1", "to": "S2", "purpose": "auth_e_persistencia", "protocol": "https_sdk", "status": "confirmada", "classification": "fato_comprovado", "risk_refs": ["R-SEC-02"]},
+    {"id": "INT2", "from": "MCP", "to": "S2", "purpose": "leitura_para_analise", "status": "confirmada_nao_usavel_sem_auth", "classification": "evidencia_parcial"},
+    {"id": "INT-HYP", "from": "sistemas_de_negocio", "to": "futuro_crm", "status": "hipotetica", "classification": "hipotese", "notes": "Sem evidencia."}
+  ],
+  "data_quality_issues": [
+    {"id": "Q-REAL-01", "issue": "Metadados do app ainda do template (Create Next App)", "classification": "fato_comprovado", "evidence": "src/app/layout.tsx"},
+    {"id": "Q1", "issue": "Duplicidade de cadastros", "classification": "hipotese", "measurable": false, "frequency": "nao_determinavel"},
+    {"id": "Q10", "issue": "Conflitos entre sistemas", "classification": "hipotese", "measurable": false, "frequency": "nao_determinavel"},
+    {"id": "Q13", "issue": "Dados sem finalidade/base legal", "classification": "hipotese", "measurable": false, "frequency": "nao_determinavel"}
+  ],
+  "security_findings": [
+    {"id": "SEC-01", "finding": ".env versionado no Git", "severity": "alto_como_pratica", "classification": "fato_comprovado", "evidence": [".gitignore", "git-ls-files"], "action": "remover do versionamento e auditar historico"},
+    {"id": "SEC-02", "finding": "RLS do Supabase nao confirmada", "severity": "alto_nao_confirmavel", "classification": "risco", "action": "confirmar RLS antes de dados reais"},
+    {"id": "SEC-03", "finding": "Sem logs/auditoria de aplicacao", "severity": "medio", "classification": "inferencia_tecnica"},
+    {"id": "SEC-04", "finding": "Sem autorizacao/privilegio minimo implementado", "severity": "medio", "classification": "inferencia_tecnica"}
+  ],
+  "privacy_findings": [
+    {"id": "PRV-01", "finding": "Possivel transferencia internacional (regiao Supabase ND)", "classification": "risco", "requires": "validacao_juridica"},
+    {"id": "PRV-02", "finding": "Sem DPA/contrato de operador evidenciavel", "classification": "informacao_ausente", "requires": "validacao_juridica"},
+    {"id": "PRV-03", "finding": "Conflito retencao ICP-Brasil x exclusao LGPD", "classification": "risco", "requires": "validacao_juridica"},
+    {"id": "PRV-04", "finding": "Possiveis dados sensiveis/biometricos no dominio", "classification": "risco", "requires": "validacao_juridica"},
+    {"id": "PRV-05", "finding": "Sem base legal/finalidade mapeadas (ROPA)", "classification": "informacao_ausente"}
+  ],
+  "hypotheses": [
+    {"id": "HE35", "text": "Volumes/sistemas desconhecidos", "result": "confirmada", "confidence": "media"},
+    {"id": "HE06", "text": "Governanca de dados ausente", "result": "parcialmente_confirmada_no_ambiente", "confidence": "baixa"},
+    {"id": "HE32", "text": "Sem dominios/limites definidos", "result": "parcialmente_confirmada", "confidence": "media"},
+    {"id": "HE33", "text": "IA prematura por baixa qualidade de dados", "result": "parcialmente_confirmada", "confidence": "media"},
+    {"id": "HE01", "text": "Sem chave unica de pessoa entre sistemas", "result": "nao_testavel", "confidence": null},
+    {"id": "HE19", "text": "Conflito retencao ICP x exclusao LGPD", "result": "sem_evidencia", "confidence": null},
+    {"id": "OUTRAS", "text": "HE02,HE03,HE04,HE05,HE07-HE31,HE34", "result": "majoritariamente_nao_testavel_ou_sem_evidencia", "confidence": null, "notes": "Legado ausente no ambiente."}
+  ],
+  "evidence": [
+    {"ref": "package.json", "supports": ["stack", "S1", "S2"], "classification": "fato_comprovado"},
+    {"ref": ".mcp.json", "supports": ["S2", "INT2"], "classification": "fato_comprovado"},
+    {"ref": ".env", "supports": ["SEC-01", "FD1"], "classification": "fato_comprovado", "note": "valores nao reproduzidos"},
+    {"ref": ".gitignore", "supports": ["SEC-01"], "classification": "fato_comprovado"},
+    {"ref": "src/lib/supabase/*", "supports": ["INT1", "auth"], "classification": "fato_comprovado"},
+    {"ref": "src/proxy.ts", "supports": ["auth_session_refresh"], "classification": "fato_comprovado"},
+    {"ref": "README.md", "supports": ["S4_vercel_inferido"], "classification": "inferencia_tecnica"}
+  ],
+  "gaps": [
+    "inventario_real_do_legado",
+    "schema_supabase",
+    "integracoes_de_negocio",
+    "volumes_e_metricas",
+    "politicas_lgpd_seguranca",
+    "matriz_de_acessos",
+    "contratos_operador_dpa",
+    "regiao_supabase",
+    "dpo_e_donos_de_dados",
+    "definicoes_de_negocio"
+  ],
+  "risks": [
+    {"id": "R-SEC-01", "severity": "alto", "type": "seguranca"},
+    {"id": "R-SEC-02", "severity": "alto", "type": "seguranca"},
+    {"id": "R-GOV-01", "severity": "alto", "type": "governanca"},
+    {"id": "R-EVI-01", "severity": "alto", "type": "metodo"},
+    {"id": "PRV-01", "severity": "medio_alto", "type": "juridico"},
+    {"id": "PRV-03", "severity": "medio_alto", "type": "juridico"}
+  ],
+  "decisions": [
+    {"id": "DC1", "decision": "Autorizar coleta de evidencias do legado com minimizacao", "owner": "Gestao+Seguranca+DPO"},
+    {"id": "DC2", "decision": "Remover .env do versionamento e auditar historico", "owner": "TechLead/Seguranca", "actionable_now": true},
+    {"id": "DC3", "decision": "Confirmar RLS e regiao do Supabase", "owner": "TechLead/Seguranca"},
+    {"id": "DC4", "decision": "Emitir posicao juridica (transferencia, retencao x exclusao, operador)", "owner": "Juridico/DPO"},
+    {"id": "DC5", "decision": "Aprovar definicoes de negocio", "owner": "Negocio+Dados"},
+    {"id": "DC6", "decision": "Nomear responsaveis (governanca de dados, DPO)", "owner": "Diretoria"}
+  ]
+}
