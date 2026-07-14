@@ -40,3 +40,15 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Evidências brutas — BARREIRA DE SEGURANÇA
+# Nada dentro de _evidencias-brutas/ é versionado, exceto o README.
+# Dados pessoais, exportações, dumps, planilhas e segredos NUNCA vão para o Git.
+/_evidencias-brutas/*
+!/_evidencias-brutas/README.md
+# Formatos de dado bruto barrados em qualquer lugar do repositório
+*.dump
+*.sql.gz
+*.bak
+*.xlsx
+*.parquet
